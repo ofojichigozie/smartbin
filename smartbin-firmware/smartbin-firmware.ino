@@ -47,23 +47,28 @@ void blinkLed(int times, int halfPeriodMs) {
  * Returns -1.0 on timeout (no echo / object out of range).
  */
 float measureDistanceCm() {
-  // Ensure trigger is LOW before pulse
   digitalWrite(TRIG_PIN, LOW);
-  delayMicroseconds(2);
+  delayMicroseconds(4);  // slightly longer settle
 
-  // Send 10 µs HIGH pulse to trigger
   digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
 
-  // Measure echo pulse width
+  // Wait for ECHO to go LOW first (in case it's stuck HIGH)
+  // then measure the actual pulse
   long duration = pulseIn(ECHO_PIN, HIGH, PULSE_TIMEOUT_US);
-  if (duration == 0) {
-    return -1.0f;  // Timeout — no echo received
+
+  if (duration == 0) return -1.0f;
+  
+  // Sanity range check — HC-SR04 is rated 2cm–400cm
+  float distance = (duration * SOUND_SPEED_CM_US) / 2.0f;
+  if (distance < 2.0f || distance > 400.0f) {
+    Serial.print("[Sensor] Out-of-range reading: ");
+    Serial.println(distance);
+    return -1.0f;
   }
 
-  // distance = (duration × speed of sound) / 2  (round-trip)
-  return (duration * SOUND_SPEED_CM_US) / 2.0f;
+  return distance;
 }
 
 // ─── Network ──────────────────────────────────────────────────────────────────
@@ -99,8 +104,9 @@ bool sendReading(float distanceCm) {
   }
 
   WiFiClientSecure client;
-  HTTPClient http;
+  client.setInsecure();
 
+  HTTPClient http;
   http.begin(client, SERVER_URL);
   http.addHeader("Content-Type", "application/json");
   http.addHeader("x-api-key", DEVICE_API_KEY);
@@ -127,7 +133,8 @@ bool sendReading(float distanceCm) {
 
 // ─── Setup ────────────────────────────────────────────────────────────────────
 void setup() {
-  Serial.begin(115200);
+  // Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("\n[SmartBin] Firmware starting...");
 
   pinMode(TRIG_PIN, OUTPUT);

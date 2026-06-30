@@ -2,29 +2,29 @@
 #define CONFIG_H
 
 // ─── WiFi ─────────────────────────────────────────────────────────────────────
-#define WIFI_SSID      "your_wifi_ssid"
-#define WIFI_PASSWORD  "your_wifi_password"
+#define WIFI_SSID      "Wirespot"
+#define WIFI_PASSWORD  "W12345678T"
 
 // ─── Backend ──────────────────────────────────────────────────────────────────
 // Replace with your deployed backend URL.
 // Render example: "https://your-app.onrender.com/api/readings"
-#define SERVER_URL     "https://your-app.onrender.com/api/readings"
-#define DEVICE_API_KEY "your_device_api_key"
+#define SERVER_URL     "https://smartbin-be.onrender.com/api/readings"
+#define DEVICE_API_KEY "sb_4e8a1f3c9b2d6e0f5a7c3b8d1e4f2a9c"
 
 // ─── Bin ──────────────────────────────────────────────────────────────────────
 #define BIN_ID         "BIN-001"
-#define BIN_HEIGHT_CM  60.0f  // Physical interior height of the bin in centimetres
+#define BIN_HEIGHT_CM  18.0f  // Physical interior height of the bin in centimetres
 
 // ─── Pins (NodeMCU ESP8266) ───────────────────────────────────────────────────
 // HC-SR04 ultrasonic sensor
-#define TRIG_PIN  D6  // GPIO12 → HC-SR04 TRIG
-#define ECHO_PIN  D7  // GPIO13 → HC-SR04 ECHO
+#define TRIG_PIN  D5  // GPIO12 → HC-SR04 TRIG
+#define ECHO_PIN  D6  // GPIO13 → HC-SR04 ECHO
 
 // External LED (connect anode to pin through a 220Ω resistor, cathode to GND)
 #define LED_PIN   D2  // GPIO4
 
 // ─── Timing ───────────────────────────────────────────────────────────────────
-#define READ_INTERVAL_MS   30000UL  // Interval between readings (30 seconds)
+#define READ_INTERVAL_MS   10000UL  // Interval between readings (10 seconds)
 #define BLINK_INTERVAL_MS  200      // LED blink half-period during events
 
 // ─── Sensor ───────────────────────────────────────────────────────────────────

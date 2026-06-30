@@ -5,7 +5,7 @@ const SEED_BIN = {
   binId: 'BIN-001',
   name: 'Main Entrance Bin',
   location: 'Main Entrance',
-  heightCm: 60,
+  heightCm: 18,
   warningThreshold: 80,
   criticalThreshold: 95,
 };
